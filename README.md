@@ -85,8 +85,12 @@ $ git log (# commit log)
 
 
 
+새로운 컴퓨터에서 기존 원격 저장소 복제하기
+ $git clone <url>
 
-랄랄랄라라라제발 쳐져줄래?
+원격 저장소의 내용 받아오기
+$ git pull origin master
+
 
 # CIL  (제목)
 
