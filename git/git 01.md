@@ -86,10 +86,18 @@ $ git log (# commit log)
 
 
 새로운 컴퓨터에서 기존 원격 저장소 복제하기
- $git clone <url>
+$ git push origin master
+
+$ git clone <url>
 
 원격 저장소에 내용 올리기(출근앉을때 해야할 일ㅋㅋ)
 $git push origin master
 
 원격 저장소의 내용 받아오기(퇴근 일어날때 해야할 일ㅋㅋㅋㅋ)
 $ git pull origin master
+
+branch (ex)master) 에서 할 일이 끝났다면
+master 로 간상태로(origin master로는 가면 안됨)
+
+$ git marge <branch>
+
