@@ -244,4 +244,194 @@ stop의 마지막수도 꼭 포함되어 출력)
     
     랜덤은 표본추출,샘플링하는 경우 주로 사용됨
 
+## 배열의 모양
+저차원 배열에서 고차원 배열로 변경
+or 고차원 배열에서 저차원 배열로 변경
+
+*변경 전 크기, 후 크기 달라지면 안됨(=자료의 갯수 일치해야함)
+
+- 저차원 배열을 고차원 배열로
+  arr1D = np.random.randint(0,10,size=4)
+  arr1D
+  display (arr1D.reshape(2,2))
+  display (arr1D.reshape(-1,2))  (*열의 갯수(크기)를 지정하면 나머지는)
+  display (arr1D.reshape(4,1))    (자동으로 계산됨)
+  여기서 변경 전 후 크기 다르면 안되는게 size 말하는 거임
+
+그래서
+  arr1D = np.random.randint(0,10,size=4)
+  arr1D.reshape(5,1)
+이거 안됨
+
+- 고차원의 배열을 저차원 배열로
+  arr2D = np.random.randint(1,10,size=(3,3))    (#행기준으로 변경)
+  arr2D
+
+  display(arr2D.flatten(order='F'))   (#열기준으로 변경)
+  (#여기서'F' 포트란오더:order가 F면 열기준으로 변경) 
+
+  ## 넘파이를 이용한 연산
   
+  기본적인 연산 
+  자료의 형태 = scalar,vector,matrix
+
+  - scalar
+    - *python에서는 변하지 않는 상수(숫자)를 말함
+    물리학에서는 양(volumn, magnited)을 표현하는 것
+    방향 없고 물리적인 양 표현하는 것
+    ex)10, [[1]]
+ 
+  - vector
+    - *python에서는 행 n개 열 1개인 형태
+    - 행벡터와 열벡터가 있으나 보통 열벡터를 말함
+    - ***근데 numpy에서는 1차원 배열 = 행 벡터
+    물리학에서는 방향성을 가진 형태
+
+    vector= np.random.randint(1,10,size=5)
+    vector
+    =>array([1, 9, 3, 4, 2])
+    
+    vector.reshape(-1, 1)
+    =>array([[1],
+          [9],
+          [3],
+          [4],
+          [2]])
+
+    *특별한 vector
+    0 vector 와 1 vector 
+    모든 원소가 0 이나 1인경우
+
+    0 vector : 
+    np.zeros((4,1))
+    =>array([[0.],
+              [0.],
+              [0.],
+              [0.]])
+            
+    1 vector : 
+    np.ones((4,1))    
+    =>array([[1.],
+            [1.],
+            [1.],
+            [1.]])
+
+- 행렬(Matrix)
+  여러개의 벡터가 모여서 하나의 행렬됨
+  
+  - 행 n개 열 m개인 배열에 matrix이용함
+  (여튼 행도 열도 다 여러개인 배열에 이용함)
+
+    mat = np.random.randint(1, 10, size=(3, 5) )
+    mat
+
+   =>array([[9, 7, 6, 7, 9],
+          [4, 1, 8, 7, 3],
+          [7, 8, 1, 6, 4]])
+          
+          
+## 타입이 다른 피연산자간의 연산
+- 사칙연산만 다룸
+- 크기가 서로 같으면 문제가 아닌데 다른경우 문제
+- 다른경우에 가능하려면 브로드 캐스팅 해야함
+  
+  * scalar 와 vector의 연산 
+    작은쪽의 크기를 큰쪽에 맞춰서 확장함(=브로드캐스팅)
+    같은 위치의 값들끼리 연산함
+      vector = np.random.randint(1, 10, size=(4,1))
+      vector
+      =>array([[1],
+              [3],
+              [2],
+              [9]])
+   스칼라를 연산하려는 벡터의 크기에 맞춰서 확장
+    2 * vector
+    =>array([[ 2],
+            [ 6],
+            [ 4],
+            [18]])
+
+  * 스칼라와 행렬의 연산
+    마찬가지로 브로드캐스팅 후에 같은 위치의 값들끼리 연산
+    mat = np.random.randint(1, 10, size=(3, 4)리
+    mat
+    =>array([[9, 9, 5, 9],
+            [2, 9, 3, 1],
+            [9, 6, 1, 9]])
+
+    2 * mat
+    => array([[18, 18, 10, 18],
+              [ 4, 18,  6,  2],
+              [18, 12,  2, 18]])
+
+  * 벡터와 행렬의 연산
+    벡터가 행렬의 크기에 맞춰서 브로드캐스팅이 가능하면 연산이 가능
+    display(vector)
+    display(mat)
+    =>array([[1],
+            [3],
+            [2],
+            [9]])
+      array([[9, 9, 5, 9],
+            [2, 9, 3, 1],
+            [9, 6, 1, 9]])
+
+            vector * mat 이거는 ValueError 됨..
+
+      vector = np.random.randint(1, 10, size=(3,1))
+      vector
+      =>array([[9],
+              [2],
+              [3]])
+
+      vector * mat
+      =>array([[81, 81, 45, 81],
+              [ 4, 18,  6,  2],
+              [27, 18,  3, 27]])
+
+  *벡터와 벡터의 연산은 브로드캐스팅이 되지 않기 때문에, 크기가 반드시 같아야 합니다.
+    vec1 = np.random.randint(1, 10, size=(3, 1))
+    vec2 = np.random.randint(1, 10, size=(4, 1))
+    display( vec1, vec2 )
+
+    =>array([[4],
+          [8],
+          [5]])
+    array([[2],
+          [9],
+          [8],
+          [5]])
+
+    크기가 같다면, 연산이 가능합니다. 
+    vec1 = np.random.randint(1, 10, size=(3, 1))
+    vec2 = np.random.randint(1, 10, size=(3, 1))
+    display( vec1, vec2 )
+    =>array([[4],
+            [7],
+            [8]])
+      array([[7],
+            [3],
+            [9]])
+    
+    vec1 * vec2
+    =>array([[28],
+            [21],
+            [72]])
+
+ 행렬과 행렬의 연산
+차원이 같으면, 벡터와 마찬가지로 브로드캐스팅 되지 않습니다. 
+차원이 다르면, 저차원 행렬이 고차원의 행렬로 브로드캐스팅 가능하면 연산이 가능
+\
+같은 차원이라면, 반드시 두 행렬의 크기가 같아야 합니다. 
+mat1 = np.random.randint(1, 10, size=(2, 2))
+mat2 = np.random.randint(1, 10, size=(2, 2))
+display( mat1, mat2 )
+
+=>array([[6, 8],
+        [8, 2]])
+  array([[6, 6],
+        [1, 8]])
+
+mat1 * mat2
+=>array([[36, 48],
+        [ 8, 16]])
